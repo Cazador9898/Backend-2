@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotificacionController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">notificaciones-service</a> &gt; <a href="index.source.html" class="el_package">com.minimarket.notificaciones.controller</a> &gt; <span class="el_source">NotificacionController.java</span></div><h1>NotificacionController.java</h1><pre class="source lang-java linenums">package com.minimarket.notificaciones.controller;
+
+import com.minimarket.notificaciones.model.Notificacion;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.time.Instant;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+@Tag(name=&quot;Notificaciones&quot;, description=&quot;Recepción de eventos generados por otros microservicios&quot;)
+@RestController
+@RequestMapping(&quot;/api/notificaciones&quot;)
+<span class="fc" id="L24">public class NotificacionController {</span>
+<span class="fc" id="L25"> private final List&lt;Notificacion&gt; store = new CopyOnWriteArrayList&lt;&gt;();</span>
+<span class="fc" id="L26"> private final AtomicLong sequence = new AtomicLong();</span>
+
+ @Operation(summary=&quot;Listar notificaciones procesadas&quot;)
+ @GetMapping
+ public CollectionModel&lt;EntityModel&lt;Notificacion&gt;&gt; listar() {
+<span class="nc" id="L31">  List&lt;EntityModel&lt;Notificacion&gt;&gt; items = store.stream().map(this::model).toList();</span>
+<span class="nc" id="L32">  return CollectionModel.of(items, linkTo(methodOn(NotificacionController.class).listar()).withSelfRel());</span>
+ }
+
+ @Operation(summary=&quot;Recibir una notificación interna&quot;)
+ @PostMapping
+ public ResponseEntity&lt;EntityModel&lt;Notificacion&gt;&gt; crear(@Valid @RequestBody Notificacion request) {
+<span class="fc" id="L38">  Notificacion saved = new Notificacion(sequence.incrementAndGet(), request.tipo(), request.referenciaId(),</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">          request.destinatario(), request.fecha() == null ? Instant.now() : request.fecha());</span>
+<span class="fc" id="L40">  store.add(saved);</span>
+<span class="fc" id="L41">  return ResponseEntity.created(URI.create(&quot;/api/notificaciones/&quot; + saved.id())).body(model(saved));</span>
+ }
+
+ @Operation(summary=&quot;Consultar una notificación&quot;)
+ @GetMapping(&quot;/{id}&quot;)
+ public ResponseEntity&lt;EntityModel&lt;Notificacion&gt;&gt; obtener(@PathVariable Long id) {
+<span class="nc" id="L47">  return store.stream().filter(n -&gt; n.id().equals(id)).findFirst().map(n -&gt; ResponseEntity.ok(model(n)))</span>
+<span class="nc" id="L48">          .orElseGet(() -&gt; ResponseEntity.notFound().build());</span>
+ }
+ private EntityModel&lt;Notificacion&gt; model(Notificacion n) {
+<span class="fc" id="L51">  return EntityModel.of(n, linkTo(methodOn(NotificacionController.class).obtener(n.id())).withSelfRel(),</span>
+<span class="fc" id="L52">          linkTo(methodOn(NotificacionController.class).listar()).withRel(&quot;notificaciones&quot;));</span>
+ }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

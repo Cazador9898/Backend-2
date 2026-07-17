@@ -1,0 +1,6 @@
+com\minimarket\notificaciones\config\SecurityConfig.class
+com\minimarket\notificaciones\NotificacionesApplication.class
+com\minimarket\notificaciones\controller\NotificacionController.class
+com\minimarket\notificaciones\config\OpenApiConfig.class
+com\minimarket\notificaciones\model\Notificacion.class
+com\minimarket\notificaciones\security\ApiKeyFilter.class

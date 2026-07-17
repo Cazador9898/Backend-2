@@ -1,0 +1,17 @@
+services:
+  notificaciones-service:
+    build: ./notificaciones-service
+    environment:
+      NOTIFICACIONES_API_KEY: clave-interna-minimarket
+    ports:
+      - "8081:8081"
+  minimarket-core-service:
+    build: ./minimarket-core-service
+    depends_on:
+      - notificaciones-service
+    environment:
+      NOTIFICACIONES_URL: http://notificaciones-service:8081
+      NOTIFICACIONES_API_KEY: clave-interna-minimarket
+      JWT_SECRET: MinimarketPlusClaveSegura2026ConMasDe32Caracteres
+    ports:
+      - "8080:8080"

@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+notificaciones-service,com.minimarket.notificaciones,NotificacionesApplication,5,3,0,0,1,1,1,1,1,1
+notificaciones-service,com.minimarket.notificaciones.model,Notificacion,0,18,0,0,0,1,0,1,0,1
+notificaciones-service,com.minimarket.notificaciones.config,OpenApiConfig,0,17,0,0,0,2,0,2,0,2
+notificaciones-service,com.minimarket.notificaciones.config,SecurityConfig,0,24,0,0,0,3,0,4,0,4
+notificaciones-service,com.minimarket.notificaciones.security,ApiKeyFilter,0,33,2,4,0,5,2,3,0,2
+notificaciones-service,com.minimarket.notificaciones.controller,NotificacionController,53,77,1,1,4,9,6,3,5,3
